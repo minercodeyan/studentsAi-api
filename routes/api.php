@@ -27,3 +27,9 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
 });
+
+Route::group(['middleware'=>['api']], function(){
+    //product rotes
+    Route::resource("students",\App\Http\Controllers\StudentController::class);
+
+});
