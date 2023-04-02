@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\UnauthorizedException;
-use App\Models\User;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Servises\UserService;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
 class AuthController extends Controller
 {
+
+    protected UserService $userService;
+
     /**
      * Create a new AuthController instance.
      *
      * @return void
+     *
      */
-    public function __construct()
+    public function __construct(UserService $userService)
     {
+        $this->userService = $userService;
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
@@ -27,23 +30,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function register() {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:8',
-        ]);
-
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        $user = new User;
-        $user->name = request()->name;
-        $user->email = request()->email;
-        $user->password = bcrypt(request()->password);
-        $user->save();
-
-        return response()->json($user, 201);
+        return response()->json($this->userService->createUser(request()->all()), ResponseAlias::HTTP_CREATED);
     }
 
 
@@ -56,9 +43,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = JWTAuth::attempt($credentials)) {
-            throw new UnauthorizedException('Неверный логин или пароль');
-        }
+        $token = $this->userService->getAuthToken($credentials);
 
         return $this->respondWithToken($token);
     }
@@ -70,7 +55,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth()->user(),ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -82,7 +67,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Successfully logged out'],ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -105,8 +90,8 @@ class AuthController extends Controller
     protected function respondWithToken($token): \Illuminate\Http\JsonResponse
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-        ]);
+            'user'=>auth()->user(),
+            'accessToken' => $token,
+        ],ResponseAlias::HTTP_OK);
     }
 }

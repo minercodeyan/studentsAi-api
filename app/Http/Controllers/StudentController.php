@@ -9,6 +9,7 @@ use App\Servises\StudentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class StudentController extends Controller
 {
@@ -22,7 +23,7 @@ class StudentController extends Controller
     public function index(): JsonResponse
     {
         $products = $this->productService->findAll();
-        return response()->json(StudentStandardResource::collection($products),200);
+        return response()->json(StudentStandardResource::collection($products),ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -32,7 +33,7 @@ class StudentController extends Controller
     {
         $input = $request->all();
         $product = $this->productService->createProduct($input);
-        return response()->json(new StudentStandardResource($product), 201);
+        return response()->json(new StudentStandardResource($product), ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -41,7 +42,7 @@ class StudentController extends Controller
     public function show($id): JsonResponse
     {
         $product = $this->productService->findProductById($id);
-        return response()->json(new StudentStandardResource($product), 200);
+        return response()->json(new StudentStandardResource($product), ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -51,7 +52,7 @@ class StudentController extends Controller
     {
         $input = $request->all();
         $this->productService->updateProduct($input, $product);
-        return $this->sendResponse(new StudentStandardResource($product), 'Product updated successfully.');
+        return response()->json(new StudentStandardResource($product), ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -60,7 +61,7 @@ class StudentController extends Controller
     public function destroy($id): JsonResponse
     {
         $deletedStudent = $this->productService->deleteProduct($id);
-        return $this->sendResponse($deletedStudent, 'Product deleted successfully.');
+        return  response()->json($deletedStudent, ResponseAlias::HTTP_OK);
     }
 
     public function addProductsGroup(Request $request): JsonResponse

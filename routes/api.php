@@ -33,3 +33,8 @@ Route::group(['middleware'=>['api']], function(){
     Route::resource("students",\App\Http\Controllers\StudentController::class);
 
 });
+
+Route::group(['middleware'=>['api','auth:api']], function(){
+    //product rotes
+
+});
