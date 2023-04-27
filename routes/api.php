@@ -15,23 +15,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group([
+//auth rotes
 
-    'middleware' => 'api',
-    'prefix' => 'auth'
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 
-], function () {
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
-    Route::post('/me', [AuthController::class, 'me'])->name('me');
+    Route::controller(\App\Http\Controllers\ChatController::class)->group(function (){
+        Route::post('/register', 'register')->name('register');
+        Route::post('/login', 'login')->name('login');
+        Route::post('/logout',  'logout')->name('logout');
+        Route::post('/refresh', 'refresh')->name('refresh');
+        Route::post('/me',  'me')->name('me');
+    });
+
 });
 
+//public rotes
+
 Route::group(['middleware'=>['api']], function(){
-    //product rotes
     Route::resource("students",\App\Http\Controllers\StudentController::class);
 
+    Route::controller(\App\Http\Controllers\ChatController::class)->group(function (){
+        Route::get('/messages','messages');
+        Route::post('/send','send');
+    });
 });
 
 Route::group(['middleware'=>['api','auth:api']], function(){

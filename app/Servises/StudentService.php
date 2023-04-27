@@ -4,19 +4,14 @@ namespace App\Servises;
 
 use App\Constants\ValidationConstant;
 use App\Exceptions\NotFoundException;
-use App\Models\Group;
+
 use App\Models\Student;
-use App\Utils\ProjectValidator;
+
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class StudentService
 {
-    protected ProjectValidator $projectValidator;
-
-    public function __construct(ProjectValidator $projectValidator)
-    {
-        $this->projectValidator = $projectValidator;
-    }
 
     public function findAll(){
         return Student::all();
@@ -43,13 +38,15 @@ class StudentService
     /**
      * @throws ValidationException
      */
-    public function updateProduct($input, $prod) : void{
-        $this
-            ->projectValidator
-            ->validateRequest($input,ValidationConstant::getProductValidationForUpdate());
+    public function updateProduct($input, $prod)
+    {
+        $validator = Validator::make($input, ValidationConstant::getProductValidationForUpdate());
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
         $prod->firstname = $input['name'];
         $prod->lastname = $input['barcode'];
-        $prod->save();;
+        $prod->save();
     }
 
     public function deleteProduct($id) : bool
