@@ -5,6 +5,7 @@ namespace App\Servises;
 use App\Events\MessageSend;
 use App\Models\Message;
 
+
 class MessageService
 {
     public function getAllMessages(){
@@ -14,12 +15,14 @@ class MessageService
 
     public function createMessage($data){
 
+        $user = \request()->user('api');
+
         $message = Message::create([
-            'text'=>$data['text'],
-            'user_id'=>$data['user_id']
+            'message'=>$data['text'],
+            'user_id'=>$user->id,
         ]);
 
-        broadcast(new MessageSend(request()->user(),$message));
+        broadcast(new MessageSend($user,$message));
 
         return $message;
     }

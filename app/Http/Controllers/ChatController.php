@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Resources\MessageResource;
 use App\Servises\MessageService;
 
-use Symfony\Component\HttpFoundation\Request;
+
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
@@ -20,10 +22,13 @@ class ChatController extends Controller
 
 
     public function messages(){
-        return response()->json($this->messageService->getAllMessages(),ResponseAlias::HTTP_OK);
+        return response()->json(MessageResource::collection($this->messageService->getAllMessages()),ResponseAlias::HTTP_OK);
     }
 
     public function send(Request $request){
-        return $this->messageService->createMessage($request->request->all());
+        return response()->json(new MessageResource(
+            $this->messageService->createMessage($request->all())),
+            ResponseAlias::HTTP_OK);
+
     }
 }

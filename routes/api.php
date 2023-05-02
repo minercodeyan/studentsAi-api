@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 
-    Route::controller(\App\Http\Controllers\ChatController::class)->group(function (){
+    Route::controller(\App\Http\Controllers\AuthController::class)->group(function (){
         Route::post('/register', 'register')->name('register');
         Route::post('/login', 'login')->name('login');
         Route::post('/logout',  'logout')->name('logout');
@@ -34,13 +34,13 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 Route::group(['middleware'=>['api']], function(){
     Route::resource("students",\App\Http\Controllers\StudentController::class);
 
-    Route::controller(\App\Http\Controllers\ChatController::class)->group(function (){
-        Route::get('/messages','messages');
-        Route::post('/send','send');
-    });
+
 });
 
 Route::group(['middleware'=>['api','auth:api']], function(){
     //product rotes
-
+    Route::controller(\App\Http\Controllers\ChatController::class)->group(function (){
+        Route::get('/messages','messages');
+        Route::post('/send','send');
+    });
 });
