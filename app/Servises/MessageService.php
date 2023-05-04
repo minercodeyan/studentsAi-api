@@ -3,6 +3,7 @@
 namespace App\Servises;
 
 use App\Events\MessageSend;
+use App\Http\Resources\MessageDTO;
 use App\Models\Message;
 
 
@@ -22,7 +23,13 @@ class MessageService
             'user_id'=>$user->id,
         ]);
 
-        broadcast(new MessageSend($user,$message));
+
+        broadcast(new MessageSend([
+            'id'=>$message->id,
+            'text' => $message->message,
+            'user'=>$user,
+            'localDate'=>$message->created_at
+        ]));
 
         return $message;
     }

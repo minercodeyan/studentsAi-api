@@ -20,3 +20,4 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('errors.403');
 });
+
