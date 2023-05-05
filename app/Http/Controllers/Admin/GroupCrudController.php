@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\GroupRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class UserCrudController
+ * Class GroupCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class UserCrudController extends CrudController
+class GroupCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,11 +26,9 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
-        $this->crud->removeButton('delete');
-        CRUD::setModel(\App\Models\User::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('user', 'users');
-        $this->crud->denyAccess(['delete']);
+        CRUD::setModel(\App\Models\Group::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/group');
+        CRUD::setEntityNameStrings('группы', 'группы');
     }
 
     /**
@@ -41,9 +39,23 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name');
-        CRUD::column('email');
-        CRUD::column('password');
+        $this->crud->addColumn([
+            'name' => 'number',
+            'label' => "Номер",
+            'type' => 'text'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'created_at',
+            'label' => "Дата создания",
+            'type' => 'date'
+        ]);
+        $this->crud->setDefaultPageLength(5);
+
+        /**
+         * Columns can be defined using the fluent syntax or array syntax:
+         * - CRUD::column('price')->type('number');
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
+         */
     }
 
     /**
@@ -54,11 +66,9 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
+        CRUD::setValidation(GroupRequest::class);
 
-        CRUD::field('name');
-        CRUD::field('email');
-        CRUD::field('password');
+        CRUD::field('number');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
