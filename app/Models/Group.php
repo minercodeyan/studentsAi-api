@@ -14,4 +14,9 @@ class Group extends Model
     protected $fillable = [
         'number',
     ];
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
 }

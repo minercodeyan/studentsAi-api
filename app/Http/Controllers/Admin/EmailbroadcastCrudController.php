@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\EmailbroadcastRequest;
+use App\Servises\EmailBroadcastService;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -19,6 +20,24 @@ class EmailbroadcastCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
+    private EmailBroadcastService $broadcastService;
+
+    /**
+     * @param \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+     */
+    public function __construct(EmailBroadcastService $broadcastService)
+    {
+        parent::__construct();
+        $this->broadcastService = $broadcastService;
+    }
+
+    /**
+     * @param \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+     * @param EmailBroadcastService $broadcastService
+     */
+
+
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -28,7 +47,7 @@ class EmailbroadcastCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Emailbroadcast::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/emailbroadcast');
-        CRUD::setEntityNameStrings('emailbroadcast', 'emailbroadcasts');
+        CRUD::setEntityNameStrings('email рассылка', 'email рассылки');
     }
 
     /**
@@ -43,6 +62,7 @@ class EmailbroadcastCrudController extends CrudController
         CRUD::column('broadcast_message');
         CRUD::column('created_at');
         CRUD::column('updated_at');
+        $this->crud->addButtonFromView('line', 'send', 'send', 'beginning');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -94,5 +114,11 @@ class EmailbroadcastCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function send($id)
+    {
+        $this->broadcastService->sendGroupMail($id);
+        return redirect()->back();
     }
 }

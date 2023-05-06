@@ -17,16 +17,6 @@ class StudentService
         return Student::all();
     }
 
-    /**
-     * @throws ValidationException
-     */
-    public function createProduct($prod){
-        $this
-            ->projectValidator
-            ->validateRequest($prod,ValidationConstant::getProductValidationForSave());
-        return Student::create($prod);
-    }
-
     public function findProductById($id){
         $student = Student::find($id);
         if(!$student){

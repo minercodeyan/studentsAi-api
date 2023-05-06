@@ -16,9 +16,20 @@ class EmailBroadcast extends Model
         'broadcast_message',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // auto-sets values on creation
+        static::creating(function ($model) {
+            $model->is_send = $model->is_send ?? true;
+        });
+    }
+
     public function groups()
     {
         return $this->belongsToMany(Group::class,
             'groups_email_broadcasts', 'broadcast_id', 'group_id');
     }
+
 }

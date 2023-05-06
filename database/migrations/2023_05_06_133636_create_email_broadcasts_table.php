@@ -17,7 +17,7 @@ class CreateEmailBroadcastsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('broadcast_message');
-
+            $table->boolean('is_send');
             $table->timestamps();
         });
     }
