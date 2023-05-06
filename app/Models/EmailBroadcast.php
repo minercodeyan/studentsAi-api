@@ -6,12 +6,19 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Group extends Model
+class EmailBroadcast extends Model
 {
     use CrudTrait;
     use HasFactory;
 
     protected $fillable = [
-        'number',
+        'title',
+        'broadcast_message',
     ];
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class,
+            'groups_email_broadcasts', 'broadcast_id', 'group_id');
+    }
 }

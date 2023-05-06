@@ -8,10 +8,12 @@
         'button_link' => backpack_url('logout'),
         'button_text' => trans('backpack::base.logout'),
     ];
+
 @endphp
 
 @section('content')
     <p>Статистика</p>
+    <canvas id="myChart" style="width:100%;max-width:700px; margin: 40px 0px"></canvas>
 @endsection
 
 @php
@@ -45,7 +47,12 @@ $widgets['after_content'][]=[
 'progressClass' => 'progress-bar bg-primary',
 'hint'          => '20 для нового уровня.',
 ]
-]]
+]];
+$widgets['after_content'][]=[
+    'type'     => 'script',
+    'content'  => asset('js/sexChart.js'),
+]
+
 
 
 @endphp
