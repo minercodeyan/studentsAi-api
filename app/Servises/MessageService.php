@@ -5,13 +5,18 @@ namespace App\Servises;
 use App\Events\MessageSend;
 use App\Http\Resources\MessageDTO;
 use App\Models\Message;
+use App\Models\User;
 
 
 class MessageService
 {
-    public function getAllMessages(){
+    public function getGroupMessages(){
+
+        $user = \request()->user('api');
+        $ids = User::query()->where('group_id',$user->group_id)->pluck('id')->toArray();
+
         return Message::query()
-            ->with('user')->get();
+            ->with('user')->whereIn('user_id',$ids)->get();
     }
 
     public function createMessage($data){

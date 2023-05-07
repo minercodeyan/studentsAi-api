@@ -17,7 +17,7 @@ class StudentService
         return Student::all();
     }
 
-    public function findProductById($id){
+    public function findById($id){
         $student = Student::find($id);
         if(!$student){
             throw new NotFoundException("product");
@@ -39,10 +39,10 @@ class StudentService
         $prod->save();
     }
 
-    public function deleteProduct($id) : bool
+    public function deleteStudent($id) : bool
     {
         return Student::findOr($id,function (){
-            throw new NotFoundException("Product already deleted and");
+            throw new NotFoundException("Студен не найден");
         })->delete();
     }
 

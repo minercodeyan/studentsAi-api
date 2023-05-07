@@ -41,7 +41,7 @@ class StudentController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $product = $this->productService->findProductById($id);
+        $product = $this->productService->findById($id);
         return response()->json(new StudentStandardResource($product), ResponseAlias::HTTP_OK);
     }
 

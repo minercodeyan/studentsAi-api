@@ -34,6 +34,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 Route::group(['middleware'=>['api']], function(){
     Route::resource("students",\App\Http\Controllers\StudentController::class);
 
+    Route::get('/groups/', [\App\Http\Controllers\GroupController::class, 'index']);
 
 });
 
@@ -43,4 +44,6 @@ Route::group(['middleware'=>['api','auth:api']], function(){
         Route::get('/messages','messages');
         Route::post('/send','send');
     });
+
+    Route::get('/groups/user-group', [\App\Http\Controllers\GroupController::class, 'getUserGroup']);
 });

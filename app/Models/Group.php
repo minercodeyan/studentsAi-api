@@ -15,8 +15,8 @@ class Group extends Model
         'number',
     ];
 
-    public function students()
+    public function users()
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(User::class);
     }
 }

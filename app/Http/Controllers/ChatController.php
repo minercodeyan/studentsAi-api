@@ -22,7 +22,7 @@ class ChatController extends Controller
 
 
     public function messages(){
-        return response()->json(MessageResource::collection($this->messageService->getAllMessages()),ResponseAlias::HTTP_OK);
+        return response()->json(MessageResource::collection($this->messageService->getGroupMessages()),ResponseAlias::HTTP_OK);
     }
 
     public function send(Request $request){

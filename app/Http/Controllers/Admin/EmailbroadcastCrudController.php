@@ -6,6 +6,7 @@ use App\Http\Requests\EmailbroadcastRequest;
 use App\Servises\EmailBroadcastService;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class EmailbroadcastCrudController
