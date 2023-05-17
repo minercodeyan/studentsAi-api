@@ -16,3 +16,5 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('student') }}"><i class="nav-icon la la-people-carry"></i> Обучающиеся</a></li>
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('emailbroadcast') }}"><i class="nav-icon la la-mail-bulk"></i> Email рассылки</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('test') }}"><i class="nav-icon la la-etsy"></i> Тесты</a></li>
