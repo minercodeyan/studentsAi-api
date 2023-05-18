@@ -10,4 +10,10 @@ class TestAnswer extends Model
     use HasFactory;
 
     protected $table = 'test_answers';
+
+    protected $fillable = [
+        'title',
+        'description',
+        'question_id',
+    ];
 }

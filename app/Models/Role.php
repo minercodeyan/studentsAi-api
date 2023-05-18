@@ -7,4 +7,7 @@ class Role extends \Spatie\Permission\Models\Role
 {
     use CrudTrait;
 
+    protected $fillable = [
+        'role',
+    ];
 }
