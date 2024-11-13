@@ -22,5 +22,6 @@ Route::group([
     Route::crud('role', 'RoleCrudController');
     Route::crud('emailbroadcast', 'EmailbroadcastCrudController');
     Route::get('emailbroadcast/{id}/send', 'EmailbroadcastCrudController@send');
+    Route::get('group/{id}/upload', 'GroupCrudController@upload');
     Route::crud('test', 'TestCrudController');
 }); // this should be the absolute last line of this file

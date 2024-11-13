@@ -6,6 +6,7 @@ use App\Constants\ValidationConstant;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Student;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Nette\Schema\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -33,8 +34,8 @@ class UserService
         return $user;
     }
 
-    public function getAuthToken($credentials){
-        if (! $token = JWTAuth::attempt($credentials)) {
+    public function getAuthToken($credentials,$expAt){
+        if (! $token = JWTAuth::attempt($credentials,['exp' => $expAt])) {
             throw new UnauthorizedException('Неверный логин или пароль');
         }
         return $token;

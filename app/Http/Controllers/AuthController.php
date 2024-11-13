@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Servises\UserService;
+use Carbon\Carbon;
+use Psy\Readline\Hoa\Console;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
@@ -43,9 +45,11 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        $token = $this->userService->getAuthToken($credentials);
+        $expTime = Carbon::now()->addDays(7)->timestamp;
 
-        return $this->respondWithToken($token);
+        $token = $this->userService->getAuthToken($credentials,$expTime);
+
+        return $this->respondWithToken($token,$expTime);
     }
 
     /**
@@ -83,15 +87,16 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token): \Illuminate\Http\JsonResponse
+    protected function respondWithToken(string $token, $expAt): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'user'=>auth()->user(),
             'accessToken' => $token,
+            'expiredAt'=>$expAt
         ],ResponseAlias::HTTP_OK);
     }
 }

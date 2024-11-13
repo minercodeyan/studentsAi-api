@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   web:
@@ -12,6 +12,15 @@ services:
       - 10097:80
     working_dir: /var/www/html
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
   db:
     image: mariadb
     #restart: always
@@ -20,7 +29,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: studens-db
-
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -36,7 +44,6 @@ services:
 volumes:
   dbdata:
     driver: local
-
-
+  rabbitmq_data:
 
 

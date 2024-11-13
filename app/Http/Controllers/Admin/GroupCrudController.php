@@ -50,6 +50,7 @@ class GroupCrudController extends CrudController
             'type' => 'date'
         ]);
         $this->crud->setDefaultPageLength(5);
+        $this->crud->addButtonFromView('line', 'upload', 'upload', 'beginning');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -86,5 +87,10 @@ class GroupCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function upload($id)
+    {
+        return view('upload');
     }
 }
